@@ -1,0 +1,26 @@
+{
+    "name": "mdhesari/simple-role-manager-laravel",
+    "description": "Simple laravel role management",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Mohammad Fazel",
+            "email": "mdhesari99@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Mdhesari\\RoleManager\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Mdhesari\\RoleManager\\RoleManagerServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "dev",
+    "require": {}
+}

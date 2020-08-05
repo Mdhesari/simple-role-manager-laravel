@@ -5,7 +5,7 @@ namespace Mdhesari\RoleManager\Traits;
 use Mdhesari\RoleManager\Exceptions\RoleGetRoleRepositoryFunctionIsNotFound;
 use Mdhesari\RoleManager\Exceptions\RoleRepositoryIsNotLoaded;
 
-class Authorizable
+abstract class PermissionRoles
 {
     public static $ADMIN_ROLE = 'admin';
 

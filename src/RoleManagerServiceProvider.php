@@ -13,6 +13,11 @@ class RoleManagerServiceProvider extends ServiceProvider
 
     public function boot()
     {
-        //
+        $this->publishes([
+            __DIR__ . '/../config/permissions.php' => config_path('permissions.php'),
+        ], 'config');
+
+        $this->loadMigrationsFrom('');
+
     }
 }

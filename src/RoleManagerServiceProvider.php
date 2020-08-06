@@ -20,6 +20,8 @@ class RoleManagerServiceProvider extends ServiceProvider
             __DIR__ . '/../config/permissions.php' => config_path('permissions.php'),
         ], 'config');
 
+        $this->migrateFrom(__DIR__ . '/database/migrations');
+
         if ($this->app->runningInConsole()) {
 
             $this->consoleSetup();

@@ -10,6 +10,7 @@ class RoleManagerServiceProvider extends ServiceProvider
 
     public function register()
     {
+        // register and bind classes
     }
 
     public function boot()

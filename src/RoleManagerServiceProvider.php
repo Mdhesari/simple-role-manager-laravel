@@ -15,10 +15,8 @@ class RoleManagerServiceProvider extends ServiceProvider
 
     public function boot()
     {
-        // publish required files to the project environment using vendor:publish
-        $this->publishes([
-            __DIR__ . '/../config/permissions.php' => config_path('permissions.php'),
-        ], 'config');
+
+        $this->publishFiles();
 
         $this->loadMigrationsFrom(__DIR__ . '/database/migrations');
 
@@ -26,6 +24,30 @@ class RoleManagerServiceProvider extends ServiceProvider
 
             $this->consoleSetup();
         }
+    }
+
+    /**
+     * publish required files to the project environment using vendor:publish
+     *
+     * @return void
+     */
+    public function publishFiles()
+    {
+
+        $dir = __DIR__;
+
+        $this->publishes([
+            $dir . '/../config/permissions.php' => config_path('permissions.php'),
+        ], 'config');
+
+        /**
+         * Database
+         */
+        $migration_path = database_path('migrations');
+
+        $this->publishes([
+            $dir . '/../database/migrations/create_roles_table.php.stub' => $migration_path . date('Y_m_d_His', time()) . '_create_roles_table.php',
+        ], 'migrations');
     }
 
     public function consoleSetup()

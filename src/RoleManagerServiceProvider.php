@@ -38,16 +38,16 @@ class RoleManagerServiceProvider extends ServiceProvider
 
         $this->publishes([
             $dir . '/../config/permissions.php' => config_path('permissions.php'),
-        ], 'config');
+        ], 'config-role');
 
         /**
          * Database
          */
-        $migration_path = database_path('migrations');
+        $migration_path = database_path('migrations/');
 
         $this->publishes([
             $dir . '/../database/migrations/create_roles_table.php.stub' => $migration_path . date('Y_m_d_His', time()) . '_create_roles_table.php',
-        ], 'migrations');
+        ], 'migrations-role');
     }
 
     public function consoleSetup()

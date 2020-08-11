@@ -2,47 +2,61 @@
 
 namespace Mdhesari\RoleManager\Traits;
 
-use Mdhesari\RoleManager\Exceptions\RoleGetRoleRepositoryFunctionIsNotFound;
-use Mdhesari\RoleManager\Exceptions\RoleRepositoryIsNotLoaded;
+use Illuminate\Support\Traits\Macroable;
+use Mdhesari\RoleManager\Models\Role;
 
 trait PermissionRoles
 {
-    public static $ADMIN_ROLE = 'admin';
 
-    public static $OPERATOR_ROLE = 'operator';
+    use Macroable {
+        __call as methodCall;
+    }
 
+    /**
+     * Check if there is a role with this name
+     *
+     * @param string $role
+     * @return bool
+     */
     public function hasRole(string $role)
     {
         return $this->roles()->pluck('name')->contains($role);
     }
 
+    /**
+     * Check if the user is admin
+     *
+     * @return bool
+     */
     public function isAdmin()
     {
 
         return $this->hasRole('admin');
     }
 
+    /**
+     * Get specific role by name
+     *
+     * @param string $role
+     * @return bool|mixed
+     */
     protected function parseRole(string $role)
     {
 
-        if (!method_exists($this, 'getRoleRepository')) {
+        $role = Role::where('name', $role)->first();
 
-            throw new RoleGetRoleRepositoryFunctionIsNotFound;
-        }
-
-        $repository = $this->getRoleRepository();
-
-        if (is_null($repository))
-            throw new RoleRepositoryIsNotLoaded;
-
-        $role = $repository->findByName($role);
-
-        if ($role->isEmpty())
+        if (is_null($role))
             return false;
 
         return $role;
     }
 
+    /**
+     * Assign a user to a role
+     *
+     * @param string $role
+     * @return mixed
+     */
     public function promote(string $role)
     {
 
@@ -51,6 +65,12 @@ trait PermissionRoles
         return $role ? $this->roles()->attach($role) : $role;
     }
 
+    /**
+     * Dis assign a user from a role
+     *
+     * @param string $role
+     * @return mixed
+     */
     public function dismiss(string $role)
     {
 
@@ -59,33 +79,56 @@ trait PermissionRoles
         return $role ? $this->roles()->detach($role) : $role;
     }
 
-    public function promoteAdmin()
-    {
-
-        return $this->promote(static::$ADMIN_ROLE);
-    }
-
-    public function promoteOperator()
-    {
-
-        return $this->promote(static::$OPERATOR_ROLE);
-    }
-
-    public function dismissAdmin()
-    {
-
-        return $this->dismiss(static::$ADMIN_ROLE);
-    }
-
-    public function dismissOperator()
-    {
-
-        return $this->dismiss(static::$OPERATOR_ROLE);
-    }
-
+    /**
+     * Drop all roles for a user
+     *
+     * @return mixed
+     */
     public function dismissAll()
     {
 
         return $this->roles()->sync([]);
+    }
+
+    /**
+     * Setup custom macros
+     *
+     * @return void
+     */
+    public function setupCustomMacros()
+    {
+
+        /**
+         * get roles and based on them declare methods in order to access promote and dismiss easier
+         */
+        $roles = config('permissions.roles');
+
+        foreach ($roles as $role) {
+
+            $this->macro('promote' . ucfirst($role), function () use ($role) {
+
+                $this->promote($role);
+            });
+
+            $this->macro('dismiss' . ucfirst($role), function () use ($role) {
+
+                $this->dismiss($role);
+            });
+        }
+    }
+
+    /**
+     * Overload __call method of macroable
+     *
+     * @param  mixed $method
+     * @param  mixed $parameters
+     * @return void
+     */
+    public function __call($method, $parameters)
+    {
+
+        $this->setupCustomMacros();
+
+        return $this->methodCall($method, $parameters);
     }
 }

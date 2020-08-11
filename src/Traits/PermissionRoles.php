@@ -2,7 +2,6 @@
 
 namespace Mdhesari\RoleManager\Traits;
 
-use Illuminate\Support\Traits\Macroable;
 use Mdhesari\RoleManager\Models\Role;
 
 trait PermissionRoles

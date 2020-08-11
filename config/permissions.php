@@ -4,11 +4,17 @@ return [
 
 
     'roles' => [
-        'admin' => 'admin',
-        'operator' => 'operator'
+        'admin' => [
+            'name' => 'admin',
+            'description' => 'Can do anything.'
+        ],
+        'operator' => [
+            'name' => 'operator',
+            'description' => 'Can do operational jobs.'
+        ]
     ],
 
-    'permissions' => [
+    /* 'permissions' => [
         'admin' => '*',
         'writer' => [
             'post-content',
@@ -19,5 +25,5 @@ return [
         'writer' => [
             'delete_own_content',
         ]
-    ]
+    ] */
 ];

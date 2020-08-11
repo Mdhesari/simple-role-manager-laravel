@@ -8,10 +8,6 @@ use Mdhesari\RoleManager\Models\Role;
 trait PermissionRoles
 {
 
-    use Macroable {
-        __call as methodCall;
-    }
-
     /**
      * Check if there is a role with this name
      *

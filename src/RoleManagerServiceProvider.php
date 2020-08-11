@@ -47,6 +47,7 @@ class RoleManagerServiceProvider extends ServiceProvider
 
         $this->publishes([
             $dir . '/../database/migrations/create_roles_table.php.stub' => $migration_path . date('Y_m_d_His', time()) . '_create_roles_table.php',
+            $dir . '/../database/migrations/create_role_user_table.php.stub' => $migration_path . date('Y_m_d_His', time()) . '_create_role_user_table.php',
         ], 'migrations-role');
     }
 

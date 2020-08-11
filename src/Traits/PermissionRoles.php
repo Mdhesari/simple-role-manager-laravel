@@ -9,6 +9,17 @@ trait PermissionRoles
 {
 
     /**
+     * roles role_user table
+     *
+     * @return mixed
+     */
+    public function roles()
+    {
+
+        return $this->belongsToMany(Role::class);
+    }
+
+    /**
      * Check if there is a role with this name
      *
      * @param string $role
@@ -84,47 +95,5 @@ trait PermissionRoles
     {
 
         return $this->roles()->sync([]);
-    }
-
-    /**
-     * Setup custom macros
-     *
-     * @return void
-     */
-    public function setupCustomMacros()
-    {
-
-        /**
-         * get roles and based on them declare methods in order to access promote and dismiss easier
-         */
-        $roles = config('permissions.roles');
-
-        foreach ($roles as $role) {
-
-            $this->macro('promote' . ucfirst($role), function () use ($role) {
-
-                $this->promote($role);
-            });
-
-            $this->macro('dismiss' . ucfirst($role), function () use ($role) {
-
-                $this->dismiss($role);
-            });
-        }
-    }
-
-    /**
-     * Overload __call method of macroable
-     *
-     * @param  mixed $method
-     * @param  mixed $parameters
-     * @return void
-     */
-    public function __call($method, $parameters)
-    {
-
-        $this->setupCustomMacros();
-
-        return $this->methodCall($method, $parameters);
     }
 }

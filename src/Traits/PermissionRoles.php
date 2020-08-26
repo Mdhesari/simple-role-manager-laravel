@@ -65,6 +65,8 @@ trait PermissionRoles
      */
     public function promote(string $role)
     {
+        // a user cannot have two roles of the same type
+        if($this->hasRole($role)) return false;
 
         $role = $this->parseRole($role);
 
